@@ -5,31 +5,21 @@
 ## This function creates the matrix Object
 makeCacheMatrix <- function(x = matrix()) {
 
-    #verify that the matrix is square
-    if(nrow(x) != ncol(x)) {
-        stop("Matrix is not square")
-    }
-    
-    matInverse <-NULL
+    matSolve <-NULL
 
     set <- function(y) {
-        #verify that the matrix is square
-        if(nrow(y) != ncol(y)) {
-            stop("Matrix is not square")
-        }
-        
         x <<- y
-        matInverse <<- NULL
+        matSolve <<- NULL
     }
 
     get <- function() x
-    setInv <- function(inv) matInverse <<- inv
-    getInv <- function() matInverse
+    setSolve <- function(s) matSolve <<- s
+    getSolve <- function() matSolve
 
     #Now return the list of operation    
     list(set = set, get = get,
-         setInv = setInv,
-         getInv = getInv)
+         setSolve = setSolve,
+         getSolve = getSolve)
 }
 
 
@@ -38,15 +28,15 @@ makeCacheMatrix <- function(x = matrix()) {
 
 cacheSolve <- function(x, ...) {
     
-    inv <- x$getInv()
-    if(!is.null(inv)) {
+    s <- x$getSolve()
+    if(!is.null(s)) {
         message("getting cached Inverse")
-        return(inv)
+        return(s)
     }
     
     message("Calculating the Inverse")
     mat <- x$get()
-    inv <- solve(mat)
-    x$setInv(inv)
-    inv
+    s <- solve(mat)
+    x$setSolve(s)
+    s
 }
